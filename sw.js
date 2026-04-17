@@ -10,7 +10,7 @@ self.addEventListener('install', (e) => {
                     './index.html',
                     './index.js',
                     './manifest.json',
-                    './camera-off.svg'
+                    './camera-off.svg',
                 ]),
             ),
     );

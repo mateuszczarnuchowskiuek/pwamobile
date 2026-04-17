@@ -14,10 +14,9 @@ async function startCamera() {
             video: { facingMode: 'environment' },
         });
         video.srcObject = stream;
-        
+
         if (cameraActive) cameraActive.style.display = 'flex';
         if (cameraOff) cameraOff.style.display = 'none';
-        
     } catch (err) {
         console.error('Błąd kamery: ', err);
         alert('Nie udało się uzyskać dostępu do kamery.');
@@ -48,7 +47,7 @@ function takePhoto() {
         stream.getTracks().forEach((t) => t.stop());
         video.srcObject = null;
     }
-    
+
     if (cameraActive) cameraActive.style.display = 'none';
     if (cameraOff) cameraOff.style.display = 'flex';
 
