@@ -1,15 +1,19 @@
 <!doctype html>
-<html lang="en">
+<html lang="pl">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>PWA</title>
+    <title>Geocache PWA</title>
     <link rel="manifest" href="./manifest.json" />
+
     <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    />
 
     <link
       rel="stylesheet"
@@ -17,35 +21,152 @@
     />
 
     <style>
+      :root {
+        --geocache-green: #2d5a27;
+        --leaf-green: #4caf50;
+        --earth-brown: #5d4037;
+      }
+
+      body {
+        background-color: #f1f8e9;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      .navbar {
+        background-color: var(--geocache-green) !important;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      }
+
+      .card {
+        border: none;
+        border-radius: 15px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+      }
+
+      .card-header {
+        background-color: var(--leaf-green);
+        color: white;
+        border-radius: 15px 15px 0 0 !important;
+        font-weight: 600;
+      }
+
+      #video {
+        width: 100%;
+        max-height: 400px;
+        background: #000;
+        border-radius: 10px;
+        object-fit: cover;
+      }
+
       #map {
-        height: 300px;
+        height: 350px;
+        width: 100%;
+        border-radius: 10px;
+        border: 2px solid var(--leaf-green);
+      }
+
+      .btn-primary-geo {
+        background-color: var(--geocache-green);
+        border-color: var(--geocache-green);
+        color: white;
+      }
+
+      .btn-primary-geo:hover {
+        background-color: #1e3d1a;
+        color: white;
+      }
+
+      #photo {
+        width: 100%;
+        border-radius: 10px;
+        display: none;
+      }
+
+      .photo-placeholder {
+        background: #e0e0e0;
+        height: 250px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+        color: #757575;
       }
     </style>
 
     <script src="./index.js" defer></script>
   </head>
 
-  <body class="container my-4">
-    <h1 class="mb-3">Mobilna aplikacja PWA</h1>
+  <body>
+    <nav class="navbar navbar-dark sticky-top mb-4">
+      <div class="container">
+        <span class="navbar-brand h1 mb-0">
+          <i class="bi bi-geo-alt-fill me-2"></i>Geocache PWA
+        </span>
+      </div>
+    </nav>
 
-    <button class="btn btn-primary mb-3" onclick="startCamera()">
-      Włącz kamerę
-    </button>
+    <main class="container pb-5">
+      <div class="row">
+        <div class="col-lg-5">
+          <div class="card">
+            <div class="card-header">
+              <i class="bi bi-camera-fill me-2"></i>Aparat
+            </div>
+            <div class="card-body">
+              <div class="d-grid gap-2 mb-3">
+                <button
+                  class="btn btn-primary-geo btn-lg"
+                  onclick="startCamera()"
+                >
+                  <i class="bi bi-play-fill"></i> Włącz kamerę
+                </button>
+                <button class="btn btn-success btn-lg" onclick="takePhoto()">
+                  <i class="bi bi-camera"></i> Zrób zdjęcie
+                </button>
+              </div>
+              <video id="video" autoplay playsinline></video>
+              <canvas id="canvas" hidden></canvas>
+            </div>
+          </div>
+        </div>
 
-    <button class="btn btn-success mb-3" onclick="takePhoto()">
-      Zrób zdjęcie
-    </button>
+        <div class="col-lg-7">
+          <div class="card">
+            <div class="card-header">
+              <i class="bi bi-map-fill me-2"></i>Lokalizacja i Podgląd
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <div id="photo-container">
+                    <div id="placeholder" class="photo-placeholder">
+                      <span>Brak zdjęcia</span>
+                    </div>
+                    <img
+                      id="photo"
+                      class="img-fluid shadow-sm"
+                      alt="Twoje zdjęcie"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <div id="map"></div>
+                </div>
+              </div>
 
-    <video id="video" autoplay playsinline class="w-100 mb-3"></video>
-    <canvas id="canvas" hidden></canvas>
-    <img id="photo" class="img-fluid mb-3" />
+              <div class="d-grid mt-2">
+                <button class="btn btn-secondary btn-lg" onclick="sharePhoto()">
+                  <i class="bi bi-share-fill me-2"></i>Udostępnij znalezisko
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
 
-    <div id="map" class="mb-3"></div>
-
-    <button class="btn btn-secondary" onclick="sharePhoto()">
-      Udostępnij zdjęcie + lokalizację
-    </button>
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
     <script>
