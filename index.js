@@ -5,6 +5,8 @@ const video = document.getElementById('video');
 const canvas = document.getElementById('canvas');
 const photo = document.getElementById('photo');
 const placeholder = document.getElementById('placeholder');
+const cameraActive = document.getElementById('camera-active');
+const cameraOff = document.getElementById('camera-off');
 
 async function startCamera() {
     try {
@@ -12,6 +14,10 @@ async function startCamera() {
             video: { facingMode: 'environment' },
         });
         video.srcObject = stream;
+        
+        if (cameraActive) cameraActive.style.display = 'flex';
+        if (cameraOff) cameraOff.style.display = 'none';
+        
     } catch (err) {
         console.error('Błąd kamery: ', err);
         alert('Nie udało się uzyskać dostępu do kamery.');
@@ -35,9 +41,16 @@ function takePhoto() {
     photo.style.display = 'block';
     if (placeholder) placeholder.style.display = 'none';
 
+    const mapContainer = document.getElementById('map');
+    if (mapContainer) mapContainer.style.display = 'block';
+
     if (stream) {
         stream.getTracks().forEach((t) => t.stop());
+        video.srcObject = null;
     }
+    
+    if (cameraActive) cameraActive.style.display = 'none';
+    if (cameraOff) cameraOff.style.display = 'flex';
 
     getLocation();
 }
