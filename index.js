@@ -7,6 +7,7 @@ const photo = document.getElementById('photo');
 const placeholder = document.getElementById('placeholder');
 const cameraActive = document.getElementById('camera-active');
 const cameraOff = document.getElementById('camera-off');
+const btnTakePhoto = document.getElementById('btn-take-photo');
 
 async function startCamera() {
     try {
@@ -17,6 +18,7 @@ async function startCamera() {
 
         if (cameraActive) cameraActive.style.display = 'flex';
         if (cameraOff) cameraOff.style.display = 'none';
+        if (btnTakePhoto) btnTakePhoto.classList.replace('btn-secondary', 'btn-success');
     } catch (err) {
         console.error('Błąd kamery: ', err);
         alert('Nie udało się uzyskać dostępu do kamery.');
@@ -50,6 +52,7 @@ function takePhoto() {
 
     if (cameraActive) cameraActive.style.display = 'none';
     if (cameraOff) cameraOff.style.display = 'flex';
+    if (btnTakePhoto) btnTakePhoto.classList.replace('btn-success', 'btn-secondary');
 
     getLocation();
 }
