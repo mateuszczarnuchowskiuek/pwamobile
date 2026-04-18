@@ -8,6 +8,7 @@ const placeholder = document.getElementById('placeholder');
 const cameraActive = document.getElementById('camera-active');
 const cameraOff = document.getElementById('camera-off');
 const btnTakePhoto = document.getElementById('btn-take-photo');
+const btnShare = document.getElementById('btn-share');
 
 async function startCamera() {
     try {
@@ -41,6 +42,7 @@ function takePhoto() {
 
     photo.style.display = 'block';
     if (placeholder) placeholder.style.display = 'none';
+    if (btnShare) btnShare.classList.replace('btn-secondary', 'btn-primary-geo');
 
     const mapContainer = document.getElementById('map');
     if (mapContainer) mapContainer.style.display = 'block';
