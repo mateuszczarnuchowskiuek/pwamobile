@@ -1,4 +1,4 @@
-const CACHE = 'photomap-v1';
+const CACHE = 'photomap-v2';
 
 self.addEventListener('install', (e) => {
     e.waitUntil(
@@ -11,6 +11,8 @@ self.addEventListener('install', (e) => {
                     './index.js',
                     './manifest.json',
                     './camera-off.svg',
+                    './icon-192x192.png',
+                    './icon-512x512.png',
                 ]),
             ),
     );
